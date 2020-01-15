@@ -1,5 +1,5 @@
-const axios = require("axios");
-const Dev = require("../models/Dev");
+const axios = require('axios');
+const Dev = require('../models/Dev');
 
 // show for a unic result of search
 
@@ -16,7 +16,7 @@ module.exports = {
         const devExist = await Dev.findOne({ github_username });
 
         if (devExist) {
-            return res.json({ message: "Dev already exist" });
+            return res.json({ message: 'Dev already exist' });
         }
         const response = await axios.get(
             `https://api.github.com/users/${github_username}`
@@ -27,8 +27,8 @@ module.exports = {
         const techsArray = parseStringAsArray(techs);
 
         const location = {
-            type: "Point",
-            coordinates: [longitude, latitude]
+            type: 'Point',
+            coordinates: [longitude, latitude],
         };
 
         const dev = await Dev.create({
@@ -37,8 +37,8 @@ module.exports = {
             avatar_url,
             bio,
             techs: techsArray,
-            location
+            location,
         });
         return res.json(dev);
-    }
+    },
 };
