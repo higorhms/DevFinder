@@ -22,6 +22,7 @@ class DevController {
             `https://api.github.com/users/${github_username}`
         );
 
+        // eslint-disable-next-line no-undef
         const { name = login, avatar_url, bio } = response.data;
 
         const techsArray = parseStringAsArray(techs);

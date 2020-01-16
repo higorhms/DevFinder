@@ -1,18 +1,10 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import routes from './routes';
+import './database';
 
 class App {
     constructor() {
         this.server = express();
-
-        mongoose.connect(
-            'mongodb+srv://omnistack:omnistack@oministack-lo98u.mongodb.net/devradar?retryWrites=true&w=majority',
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            }
-        );
 
         this.middlewares();
         this.routes();
