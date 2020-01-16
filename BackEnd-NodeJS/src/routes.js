@@ -1,6 +1,6 @@
-const { Router } = require('express');
-const DevController = require('./controllers/DevController');
-const SearchController = require('./controllers/SearchController');
+import { Router } from 'express';
+import DevController from './controllers/DevController';
+import SearchController from './controllers/SearchController';
 
 const routes = Router();
 

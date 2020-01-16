@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const PointSchema = require('./utils/PointSchema');
+import mongoose from 'mongoose';
+import PointSchema from './utils/PointSchema';
 
 const DevSchema = new mongoose.Schema({
     name: String,
@@ -13,4 +13,4 @@ const DevSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Dev', DevSchema);
+export default mongoose.model('Dev', DevSchema);

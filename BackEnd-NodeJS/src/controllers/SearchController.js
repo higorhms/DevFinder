@@ -1,9 +1,8 @@
-const parseStringAsArray = require('../utils/parseStringAsArray');
-const Dev = require('../models/Dev');
+import parseStringAsArray from '../utils/parseStringAsArray';
+import Dev from '../models/Dev';
 
-module.exports = {
+class SearchController {
     async index(req, res) {
-        console.log(req.query);
         const { latitude, longitude, techs } = req.query;
 
         const techsArray = parseStringAsArray(techs);
@@ -22,5 +21,7 @@ module.exports = {
         });
 
         return res.json({ devs });
-    },
-};
+    }
+}
+
+export default new SearchController();

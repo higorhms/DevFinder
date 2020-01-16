@@ -1,14 +1,14 @@
-const axios = require('axios');
-const Dev = require('../models/Dev');
+import axios from 'axios';
+import Dev from '../models/Dev';
+import parseStringAsArray from '../utils/parseStringAsArray';
 
 // show for a unic result of search
-
-module.exports = {
+class DevController {
     async index(req, res) {
         const devs = await Dev.find();
 
         return res.json(devs);
-    },
+    }
 
     async store(req, res) {
         const { github_username, techs, latitude, longitude } = req.body;
@@ -40,5 +40,7 @@ module.exports = {
             location,
         });
         return res.json(dev);
-    },
-};
+    }
+}
+
+export default new DevController();
