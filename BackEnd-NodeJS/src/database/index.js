@@ -6,10 +6,10 @@ class Database {
     }
 
     initMongoConnection() {
-        mongoose.set('useCreateIndex', true);
         this.mongoConnection = mongoose.connect(
             'mongodb+srv://omnistack:omnistack@oministack-lo98u.mongodb.net/devradar?retryWrites=true&w=majority',
             {
+                useCreateIndex: true,
                 useNewUrlParser: true,
                 useFindAndModify: true,
                 useUnifiedTopology: true,
