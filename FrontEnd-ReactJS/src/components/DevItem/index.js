@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { ListItem, UserInfo } from './styles';
 
@@ -20,9 +19,9 @@ export default function DevItem({ dev }) {
                 </UserInfo>
             </header>
             <p>{dev.bio}</p>
-            <Link to={`https://github.com/${dev.github_username}`}>
+            <a href={`https://github.com/${dev.github_username}`}>
                 Acessar perfil no Github
-            </Link>
+            </a>
         </ListItem>
     );
 }
