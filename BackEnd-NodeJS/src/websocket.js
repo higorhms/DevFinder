@@ -1,8 +1,40 @@
 import socketio from 'socket.io';
 
-export default function setupWebsocket(server) {
-    const io = socketio(server);
+import parseStringAsArray from './app/utils/parseStringAsArray';
+import calculateDistance from './app/utils/calculateDistance';
+
+let io;
+const connections = [];
+
+const setupWebsocket = server => {
+    io = socketio(server);
     io.on('connection', socket => {
-        console.log(socket.id);
+        const { latitude, longitude, techs } = socket.handshake.query;
+
+        connections.push({
+            id: socket.id,
+            coordinates: {
+                latitude: Number(latitude),
+                longitude: Number(longitude),
+            },
+            techs: parseStringAsArray(techs),
+        });
     });
-}
+};
+
+const findConnections = (coordinates, techs) => {
+    return connections.filter(connection => {
+        return (
+            calculateDistance(coordinates, connection.coordinates) < 10 &&
+            connection.techs.some(item => techs.includes(item))
+        );
+    });
+};
+
+const sendMessage = (to, message, data) => {
+    to.forEach(connection => {
+        io.to(connection.id).emit(message, data);
+    });
+};
+
+export { setupWebsocket, findConnections, sendMessage };

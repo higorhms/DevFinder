@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Dev from '../models/Dev';
 import parseStringAsArray from '../utils/parseStringAsArray';
+import { findConnections, sendMessage } from '../../websocket';
 
 // show for a unic result of search
 class DevController {
@@ -13,33 +14,42 @@ class DevController {
     async store(req, res) {
         const { github_username, techs, latitude, longitude } = req.body;
 
-        const devExist = await Dev.findOne({ github_username });
+        let dev = await Dev.findOne({ github_username });
 
-        if (devExist) {
-            return res.json({ message: 'Dev already exist' });
+        if (!dev) {
+            const apiResponse = await axios.get(
+                `https://api.github.com/users/${github_username}`
+            );
+
+            const { name = login, avatar_url, bio } = apiResponse.data;
+
+            const techsArray = parseStringAsArray(techs);
+
+            const location = {
+                type: 'Point',
+                coordinates: [longitude, latitude],
+            };
+
+            dev = await Dev.create({
+                github_username,
+                name,
+                avatar_url,
+                bio,
+                techs: techsArray,
+                location,
+            });
+
+            const sendSocketMessageTo = findConnections(
+                {
+                    latitude,
+                    longitude,
+                },
+                techsArray
+            );
+
+            sendMessage(sendSocketMessageTo, 'new-dev', dev);
         }
-        const response = await axios.get(
-            `https://api.github.com/users/${github_username}`
-        );
 
-        // eslint-disable-next-line no-undef
-        const { name = login, avatar_url, bio } = response.data;
-
-        const techsArray = parseStringAsArray(techs);
-
-        const location = {
-            type: 'Point',
-            coordinates: [longitude, latitude],
-        };
-
-        const dev = await Dev.create({
-            github_username,
-            name,
-            avatar_url,
-            bio,
-            techs: techsArray,
-            location,
-        });
         return res.json(dev);
     }
 }
